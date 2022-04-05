@@ -1,0 +1,30 @@
+$icon-size: 50px;
+$translate-distance: 5px;
+
+.icons {
+  position: absolute;
+  top: -$icon-size + 10px;
+  left: 20px;
+  background-color: white;
+  width: $icon-size;
+  height: $icon-size;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 0 5px 0px #222;
+  z-index: 100;
+
+  img {
+    transition: 0.5s;
+  }
+
+  &:hover {
+    [data-icon='arrow-up'] {
+      transform: translateY(-$translate-distance);
+    }
+    [data-icon='arrow-down'] {
+      transform: translateY($translate-distance);
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "tabs": [
+    {
+      "name": "Login",
+      "path": "login"
+    },
+    {
+      "name": "Request",
+      "path": "request"
+    }
+  ]
+}

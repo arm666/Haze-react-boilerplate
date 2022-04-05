@@ -1,0 +1,22 @@
+{
+  "login": {
+    "GET": {
+      "login-error": {
+        "status": 400,
+        "response": {
+          "message": "Invalid email"
+        }
+      }
+    }
+  },
+  "todo": {
+    "POST": {
+      "todo-error": {
+        "status": 400,
+        "response": {
+          "message": "Credentials failed"
+        }
+      }
+    }
+  }
+}

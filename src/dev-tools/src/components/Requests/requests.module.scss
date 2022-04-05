@@ -1,0 +1,74 @@
+.methods {
+  display: flex;
+  border: 1px solid white;
+  border-radius: 4px;
+  // overflow: hidden;
+  .select {
+    border-color: none !important;
+
+    * {
+      border-radius: 0;
+      border-color: none !important;
+
+      &:focus,
+      &:hover {
+        border-color: none !important;
+      }
+    }
+    color: black;
+    width: 130px;
+    font-family: sans-serif;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+  input {
+    flex: 1;
+    border: none;
+  }
+}
+
+.view {
+  padding: 10px;
+  border: 1px solid #777;
+  border-radius: 4px;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+
+  [class='method'] {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    [data-method] {
+      padding: 5px;
+      font-weight: bold;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    [data-method='GET'] {
+      background-color: green;
+    }
+    [data-method='POST'] {
+      background-color: blue;
+    }
+    [data-method='PUT'] {
+      background-color: rgb(75, 75, 245);
+    }
+    [data-method='DELETE'] {
+      background-color: red;
+    }
+
+    [class='path'] {
+      letter-spacing: 1px;
+      font-weight: 100;
+    }
+  }
+
+  [class='status'] {
+    font-weight: 800;
+  }
+}

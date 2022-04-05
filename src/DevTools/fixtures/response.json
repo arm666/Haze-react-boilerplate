@@ -1,0 +1,18 @@
+{
+  "login": {
+    "login-error": {
+      "status": 201,
+      "response": {
+        "message": "Invalid email"
+      }
+    }
+  },
+  "todo": {
+    "todo-error": {
+      "status": 400,
+      "response": {
+        "message": "Credentials failed"
+      }
+    }
+  }
+}

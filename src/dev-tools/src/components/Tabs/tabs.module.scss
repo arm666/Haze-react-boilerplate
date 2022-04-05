@@ -1,0 +1,45 @@
+$tab-inactive-color: #999;
+$tab-active-color: white;
+
+.tabs {
+  margin: var(--dev-tools-container-spacing);
+  padding: 10px;
+  padding-top: 0;
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.headers {
+  position: relative;
+  padding-bottom: var(--dev-tools-container-spacing);
+  border-bottom: 1px solid #888;
+  font-size: 1.1rem;
+  font-family: sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+  gap: 20px;
+
+  [class='tab'] {
+    cursor: pointer;
+    color: $tab-inactive-color;
+    &:hover {
+      color: $tab-active-color;
+    }
+  }
+
+  [data-active='true'] {
+    color: $tab-active-color;
+  }
+}
+
+.body {
+  margin: 20px 0;
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+}
