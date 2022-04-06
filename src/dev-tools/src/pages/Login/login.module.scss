@@ -1,0 +1,14 @@
+.container {
+  display: grid;
+  width: clamp(200px, 40%, 500px);
+  gap: 10px;
+
+  [class='form-container'] {
+    display: grid;
+    gap: 10px;
+  }
+
+  button {
+    padding: 1rem;
+  }
+}

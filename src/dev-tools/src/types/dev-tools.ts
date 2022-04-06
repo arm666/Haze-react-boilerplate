@@ -7,13 +7,15 @@ export interface IApi {
   default: boolean;
 }
 
-export interface IFixtureTabData {
-  api: IApi[];
-  data: any;
-}
-
 export interface IFixtureData {
-  login: IFixtureTabData;
+  login: {
+    method: string;
+    path: string;
+    data: {
+      username: string;
+      password: string;
+    };
+  };
 }
 
 export interface IDevData {
@@ -21,6 +23,7 @@ export interface IDevData {
     active: ITab;
     data: ITab[];
   };
+  formData: any;
   onTabClick: (activeTab: ITab) => void;
   data: IFixtureData;
   minimize: boolean;

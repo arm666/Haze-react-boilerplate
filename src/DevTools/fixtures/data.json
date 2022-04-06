@@ -1,17 +1,10 @@
 {
-  "tabs": {
-    "login": {
-      "api": [
-        {
-          "method": "GET",
-          "path": "/api/v1/login",
-          "default": true
-        }
-      ],
-      "data": {
-        "username": "alpha",
-        "password": "123456"
-      }
+  "login": {
+    "method": "POST",
+    "path": "/api/v1/login",
+    "data": {
+      "username": "alpha",
+      "password": "12345"
     }
   }
 }

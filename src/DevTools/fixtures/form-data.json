@@ -1,0 +1,22 @@
+{
+  "forms": {
+    "/developers": {
+      "name": "Developers",
+      "data": {
+        "#name": "mark zuckberg",
+        "#position": "ceo of facebook"
+      }
+    },
+    "/users": {
+      "name": "Users",
+
+      "data": {
+        "#username": "alpha",
+        "#password": "12345",
+        "[name='gender']": ["#female"],
+        "select#position": ["designer"],
+        "[name='skills']": ["#css"]
+      }
+    }
+  }
+}

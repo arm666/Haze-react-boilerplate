@@ -2,10 +2,11 @@ import React, { ChangeEvent } from 'react';
 import { SingleValue } from 'react-select';
 import { nanoid } from 'nanoid';
 import { useCookies } from 'react-cookie';
-import Requests from '../components/Requests';
-import { defaultRequestValue } from '../utils/requests';
-import { IRequest, Requests as ApiRequest } from '../types/requests';
-import Input from '../components/Input';
+import Requests from '../../components/Requests';
+import { defaultRequestValue } from '../../utils/requests';
+import { IRequest, Requests as ApiRequest } from '../../types/requests';
+import Input from '../../components/Input';
+import style from './request.module.scss';
 
 export interface IStoreRequest {
   path: string;
@@ -99,9 +100,9 @@ const Request = () => {
   console.log(cookies.request);
 
   return (
-    <div className='grid grid-3 gap-10 align-items-start'>
+    <div className={style.container}>
       <Requests>
-        <div className='grid gap-5 '>
+        <div className='request-form'>
           <Requests.Methods
             value={data.current.value}
             url={data.current.url}
@@ -122,7 +123,7 @@ const Request = () => {
           </button>
         </div>
       </Requests>
-      <div className='grid gap-5'>
+      <div className={style.requests}>
         {Object.entries<IStoreRequest[]>(cookies.request || {}).map(
           ([url, requests]) =>
             requests.map((request) => (

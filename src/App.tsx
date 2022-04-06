@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import Hello from '@/components/Hello';
 import routes from './routes';
 import './resources/styles/global.scss';
 
 const App = () => {
   return (
-    <Router>
+    <>
       <Hello />
       <nav>
         <ul>
@@ -35,7 +35,7 @@ const App = () => {
           />
         ))}
       </Routes>
-    </Router>
+    </>
   );
 };
 

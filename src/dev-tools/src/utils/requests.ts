@@ -1,4 +1,5 @@
 import { SingleValue } from 'react-select';
+import { baseURL } from '../lib/axios';
 import { IRequest, Requests } from '../types/requests';
 
 const requests: Requests[] = [
@@ -16,3 +17,5 @@ export const methods: IRequest[] = requests.map((method) => ({
 export const defaultRequestValue = methods.find(
   (x) => x.value === 'GET'
 ) as SingleValue<IRequest>;
+
+export const removeBaseURL = (url: string) => url.replace(baseURL, '');

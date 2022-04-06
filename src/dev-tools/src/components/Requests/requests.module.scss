@@ -41,6 +41,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    min-width: 300px;
 
     [data-method] {
       padding: 5px;

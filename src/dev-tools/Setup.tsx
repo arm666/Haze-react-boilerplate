@@ -1,6 +1,5 @@
-import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import DevTool from './DevToolUI';
+import DevTool from './src/layouts/DevToolUI';
 import DevToolProvider from './src/providers/DevToolProvider';
 
 const DevToolSetup = () => {

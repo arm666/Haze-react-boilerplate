@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDev } from '../../providers/DevToolProvider';
-import { IDevData, IFixtureTabData } from '../../types/dev-tools';
+import { IDevData } from '../../types/dev-tools';
 import { ITab, ITabComponentList } from '../../types/tabs';
 import styles from './tabs.module.scss';
 
@@ -40,14 +40,13 @@ const Header = ({ tabs, active, onTabClick }: ITabsHeaderProps) => {
 const Body = ({ activeTab, components, className }: IBody) => {
   const { data } = useDev();
   const Element = components.find((c) => c.path === activeTab.path)?.Element;
-  const tabData = Object.getOwnPropertyDescriptor(data, activeTab.path)
-    ?.value as IFixtureTabData;
 
-  console.log({ data });
+  const tabData =
+    Object.getOwnPropertyDescriptor(data, activeTab.path)?.value || {};
 
   return (
     <div className={`${styles.body} ${className}`}>
-      {Boolean(tabData) && <Element tabData={tabData} />}
+      {Element && <Element tabData={tabData} />}
     </div>
   );
 };

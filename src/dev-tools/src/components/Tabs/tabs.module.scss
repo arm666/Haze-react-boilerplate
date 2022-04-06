@@ -1,5 +1,6 @@
 $tab-inactive-color: #999;
 $tab-active-color: white;
+$padding: 14px;
 
 .tabs {
   margin: var(--dev-tools-container-spacing);
@@ -9,20 +10,20 @@ $tab-active-color: white;
   color: white;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .headers {
   position: relative;
-  padding-bottom: var(--dev-tools-container-spacing);
+  padding: $padding;
+  padding-top: $padding + 5px;
   border-bottom: 1px solid #888;
   font-size: 1.1rem;
-  font-family: sans-serif;
   display: flex;
   flex-wrap: wrap;
   flex-grow: 0;
   flex-shrink: 0;
   gap: 20px;
+  user-select: none;
 
   [class='tab'] {
     cursor: pointer;
@@ -38,8 +39,26 @@ $tab-active-color: white;
 }
 
 .body {
-  margin: 20px 0;
+  position: relative;
+  padding-top: 10px;
+  padding: $padding;
+  margin-right: -10px;
   flex: 1;
-  height: 100%;
-  overflow-y: auto;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #222;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }

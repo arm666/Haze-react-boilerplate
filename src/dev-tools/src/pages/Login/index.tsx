@@ -1,11 +1,12 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { SingleValue } from 'react-select';
-import Input from '../components/Input';
-import Requests from '../components/Requests';
-import axios from '../lib/axios';
-import { IFixtureTabData } from '../types/dev-tools';
-import { IRequest } from '../types/requests';
-import { methods } from '../utils/requests';
+import Input from '../../components/Input';
+import Requests from '../../components/Requests';
+import axios from '../../lib/axios';
+import { IFixtureData } from '../../types/dev-tools';
+import { IRequest } from '../../types/requests';
+import { methods, removeBaseURL } from '../../utils/requests';
+import style from './login.module.scss';
 
 interface IForm {
   data: {
@@ -19,13 +20,11 @@ interface IForm {
 }
 
 interface ITabsData {
-  tabData: IFixtureTabData;
+  tabData: IFixtureData['login'];
 }
 
 const Login = ({ tabData }: ITabsData) => {
-  const value = methods.find(
-    (x) => x.value === tabData.api[0].method
-  ) as IRequest;
+  const value = methods.find((x) => x.value === tabData.method) as IRequest;
 
   const [form, setForm] = React.useState<IForm>({
     data: {
@@ -34,7 +33,7 @@ const Login = ({ tabData }: ITabsData) => {
     },
     requests: {
       value,
-      url: tabData.api[0].path,
+      url: tabData.path,
     },
   });
 
@@ -71,8 +70,10 @@ const Login = ({ tabData }: ITabsData) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .get('/login')
+    axios({
+      method: value.value,
+      url: removeBaseURL(form.requests.url),
+    })
       .then((res) => {
         console.log(res.data);
       })
@@ -82,18 +83,18 @@ const Login = ({ tabData }: ITabsData) => {
   };
 
   return (
-    <div className='w-2 grid gap-5'>
+    <div className={style.container}>
       <Requests>
         <Requests.Methods
           value={form.requests.value}
-          url={tabData.api[0].path}
+          url={tabData.path}
           handleChange={onMethodChange}
           handlePathChange={handlePathChange}
           placeholder='/api/v1/login'
         />
       </Requests>
       <form onSubmit={handleSubmit}>
-        <div className='grid gap-5'>
+        <div className='form-container'>
           <Input
             type='text'
             placeholder='username'

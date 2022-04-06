@@ -2,15 +2,17 @@ import React from 'react';
 import { IDevData, IFixtureData } from '../types/dev-tools';
 import { ITab } from '../types/tabs';
 import tabsData from '../configs/tabs.json';
-import fixturesData from '../../DevTools/fixtures/data.json';
+import data from '../../../DevTools/fixtures/data.json';
+import formData from '../../../DevTools/fixtures/form-data.json';
 
 const tabs: IDevData['tabs']['data'] = tabsData.tabs;
 const DevToolContext: React.Context<IDevData> = React.createContext({
   tabs: {
-    active: tabs[1],
+    active: tabs[2],
     data: tabs,
   },
-  data: fixturesData.tabs as IFixtureData,
+  data: data as IFixtureData,
+  formData,
   minimize: false as boolean,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTabClick: (activeTab: ITab) => {},

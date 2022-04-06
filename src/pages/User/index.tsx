@@ -1,6 +1,107 @@
+import React from 'react';
+
 const User = () => {
+  const [form, setForm] = React.useState<any>({
+    username: '',
+    password: '',
+    gender: '',
+    position: '',
+    skills: [],
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setForm((form: any) => ({ ...form, [name]: value }));
+  };
+
+  const change = (e: any) => {
+    const value: any = e?.target?.value;
+    if (value) {
+      const isPresent = form.skills.includes(value);
+      if (isPresent)
+        setForm((form: any) => ({
+          ...form,
+          skills: form.skills.filter((x: any) => x !== value),
+        }));
+      else {
+        setForm((form: any) => ({
+          ...form,
+          skills: [...form.skills, value],
+        }));
+      }
+    }
+  };
+
   return (
     <div>
+      <input
+        type='text'
+        name='username'
+        id='username'
+        placeholder='username'
+        value={form.username}
+        onChange={handleChange}
+        autoComplete='off'
+      />
+      <input
+        type='password'
+        name='password'
+        id='password'
+        placeholder='password'
+        value={form.password}
+        onChange={handleChange}
+        autoComplete='off'
+      />
+      <div>
+        <label htmlFor='gender'>gender: </label>
+        male
+        <input
+          type='radio'
+          name='gender'
+          id='male'
+          onChange={handleChange}
+          value='male'
+          checked={form.gender === 'male'}
+        />
+        female
+        <input
+          type='radio'
+          name='gender'
+          id='female'
+          value='female'
+          onChange={handleChange}
+          checked={form.gender === 'female'}
+        />
+      </div>
+      <div>
+        Position
+        <select name='position' id='position' onChange={handleChange}>
+          <option value='developer'>Developer</option>
+          <option value='designer'>Designer</option>
+        </select>
+      </div>
+      <div>
+        Skills
+        <br />
+        HTML
+        <input
+          type='checkbox'
+          name='skills'
+          id='html'
+          value='html'
+          checked={form.skills.includes('html')}
+          onChange={change}
+        />
+        CSS
+        <input
+          type='checkbox'
+          name='skills'
+          id='css'
+          value='css'
+          checked={form.skills.includes('css')}
+          onChange={change}
+        />
+      </div>
       <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
@@ -151,7 +252,6 @@ const User = () => {
       <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
-
       <h1>User</h1> <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
@@ -302,7 +402,6 @@ const User = () => {
       <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
-
       <h1>User</h1> <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
@@ -453,7 +552,6 @@ const User = () => {
       <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
-
       <h1>User</h1> <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
@@ -604,7 +702,6 @@ const User = () => {
       <h1>User</h1>
       <h1>User</h1>
       <h1>User</h1>
-
       <h1>User</h1>
     </div>
   );

@@ -1,9 +1,9 @@
 {
   "login": {
     "login-error": {
-      "status": 201,
+      "status": 401,
       "response": {
-        "message": "Invalid email"
+        "message": "Invalid email and password"
       }
     }
   },

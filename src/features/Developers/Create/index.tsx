@@ -1,34 +1,34 @@
-import React from "react";
+import React from 'react';
 import {
   useAddDevelopersMutation,
   useFetchDevelopersQuery,
   Developer,
   useFetchDeveloperQuery,
   useUpdateDeveloperMutation,
-} from "../developers-api";
-import "./create.css";
+} from '../developers-api';
+import './create.css';
 
 interface iCreateProps {
   editable?: number | null;
 }
 
 interface Field {
-  name: "name" | "position";
+  name: 'name' | 'position';
   type: string;
   label: string;
 }
 
 const fields: Field[] = [
-  { name: "name", label: "Title", type: "text" },
-  { name: "position", label: "Position", type: "text" },
+  { name: 'name', label: 'Title', type: 'text' },
+  { name: 'position', label: 'Position', type: 'text' },
 ];
 
-type DeveloperWithoutId = Omit<Developer, "id">;
+type DeveloperWithoutId = Omit<Developer, 'id'>;
 
 const Create = ({ editable }: iCreateProps) => {
   const [values, setValues] = React.useState<DeveloperWithoutId>({
-    name: "",
-    position: "",
+    name: '',
+    position: '',
   });
   const { data = [] } = useFetchDevelopersQuery(undefined, {
     skip: !!editable,
@@ -40,7 +40,7 @@ const Create = ({ editable }: iCreateProps) => {
     }
   );
   const [addDevelopers] = useAddDevelopersMutation();
-  const [updateDeveloper] = useUpdateDeveloperMutation()
+  const [updateDeveloper] = useUpdateDeveloperMutation();
 
   React.useEffect(() => {
     if (!isError && editableDeveloper) {
@@ -58,21 +58,28 @@ const Create = ({ editable }: iCreateProps) => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault(); 
-    const fn = editable ? updateDeveloper: addDevelopers;
+    e.preventDefault();
+    const fn = editable ? updateDeveloper : addDevelopers;
     fn({
       id: editable ? editable : data.length + 1,
       ...values,
     });
   };
 
+  React.useEffect(() => {
+    const d = document.querySelector('#name') as any;
+    if (d)
+      d.addEventListener('keypress', (e: any) => {
+        console.log(e.target.value);
+      });
+  }, []);
   return (
-    <form className="basic" onSubmit={handleSubmit}>
+    <form className='basic' onSubmit={handleSubmit}>
       {fields.map((field) => (
         <div key={field.name}>
           <label htmlFor={field.name}>{field.label}</label>
           <input
-            type="text"
+            type='text'
             id={field.name}
             onChange={handleChange}
             name={field.name}
@@ -81,7 +88,7 @@ const Create = ({ editable }: iCreateProps) => {
         </div>
       ))}
 
-      <button type="submit">{editable ? "Update" : "Create"}</button>
+      <button type='submit'>{editable ? 'Update' : 'Create'}</button>
     </form>
   );
 };

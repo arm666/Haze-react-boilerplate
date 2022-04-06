@@ -1,0 +1,20 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
+
+  [class='request-form'] {
+    display: grid;
+    gap: 10px;
+
+    button {
+      padding: 10px;
+    }
+  }
+}
+
+.requests {
+  display: grid;
+  gap: 1rem;
+}
