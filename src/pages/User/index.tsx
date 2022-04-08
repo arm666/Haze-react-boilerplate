@@ -6,6 +6,7 @@ const User = () => {
     password: '',
     gender: '',
     position: '',
+    description: '',
     skills: [],
   });
 
@@ -100,6 +101,14 @@ const User = () => {
           value='css'
           checked={form.skills.includes('css')}
           onChange={change}
+        />
+      </div>
+      <div>
+        <textarea
+          name='description'
+          id='description'
+          value={form.description}
+          onChange={handleChange}
         />
       </div>
       <h1>User</h1>

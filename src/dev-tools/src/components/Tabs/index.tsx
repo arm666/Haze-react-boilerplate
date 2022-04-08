@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDev } from '../../providers/DevToolProvider';
 import { IDevData } from '../../types/dev-tools';
-import { ITab, ITabComponentList } from '../../types/tabs';
+import { ITabComponent, ITabComponentList } from '../../types/tabs';
 import styles from './tabs.module.scss';
 
 interface ITabsHeaderProps {
@@ -23,7 +23,7 @@ const Tabs = ({ children }: { children: React.ReactNode }) => {
 const Header = ({ tabs, active, onTabClick }: ITabsHeaderProps) => {
   return (
     <div className={styles.headers}>
-      {tabs.map((tab: ITab) => (
+      {tabs.map((tab: ITabComponent) => (
         <div
           key={tab.path}
           className='tab'
@@ -39,7 +39,7 @@ const Header = ({ tabs, active, onTabClick }: ITabsHeaderProps) => {
 
 const Body = ({ activeTab, components, className }: IBody) => {
   const { data } = useDev();
-  const Element = components.find((c) => c.path === activeTab.path)?.Element;
+  const Element = components.find((c) => c.path === activeTab.path)?.Component;
 
   const tabData =
     Object.getOwnPropertyDescriptor(data, activeTab.path)?.value || {};

@@ -2,24 +2,36 @@ import React, { ChangeEvent } from 'react';
 import { SingleValue } from 'react-select';
 import { nanoid } from 'nanoid';
 import { useCookies } from 'react-cookie';
-import Requests from '../../components/Requests';
+import axios from 'axios';
 import { defaultRequestValue } from '../../utils/requests';
 import { IRequest, Requests as ApiRequest } from '../../types/requests';
-import Input from '../../components/Input';
+import { bolbBuilder, getDownloadableTag } from '../../utils/helpers';
 import style from './request.module.scss';
+import AddRequest from './components/AddRequest';
+import ViewRequest from './components/ViewRequest';
+import ImportExportRequest from './components/ImportExportRequest';
+import ViewConfig from './components/ViewConfig';
 
 export interface IStoreRequest {
   path: string;
   method: ApiRequest;
   id: string;
   responseKey: string;
+  isEnabled: boolean;
 }
 
-interface IData {
+export interface ICookie {
+  request: { [keys: string]: IStoreRequest[] };
+}
+
+export interface IData {
   current: { value: SingleValue<IRequest>; url: string; responseKey: string };
 }
 
+const RESPONSE_CONFIG = 'responseConfig';
+
 const Request = () => {
+  const [file, setFile] = React.useState<File | null>(null);
   const [data, setData] = React.useState<IData>({
     current: {
       value: defaultRequestValue,
@@ -29,6 +41,7 @@ const Request = () => {
   });
 
   const [cookies, setCookies] = useCookies(['request']);
+  const codeRef = React.useRef<HTMLElement>(null);
 
   const onMethodChange = (method: SingleValue<IRequest>) => {
     setData((data) => ({
@@ -42,6 +55,10 @@ const Request = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    handleDataChange(name, value as Partial<IData['current']>);
+  };
+
+  const handleDataChange = (name: string, value: Partial<IStoreRequest>) => {
     setData((data) => ({
       ...data,
       current: {
@@ -51,13 +68,32 @@ const Request = () => {
     }));
   };
 
+  const handleToggle = (key: string, request: IStoreRequest) => {
+    const currentRequests = Object.getOwnPropertyDescriptor(
+      cookies.request,
+      key
+    );
+
+    if (currentRequests?.value) {
+      const updateData = currentRequests.value.map((x: IStoreRequest) =>
+        x.id === request.id ? { ...x, isEnabled: !x.isEnabled } : x
+      );
+      const newCookie = Object.assign(cookies.request, {
+        [key]: updateData,
+      });
+
+      handleSetCookie(newCookie);
+    }
+  };
+
   const handleAdd = () => {
     if (data.current.url.trim().length) {
       const newRequest: IStoreRequest = {
         path: data.current.url.trim(),
         method: data.current.value?.value as ApiRequest,
-        id: nanoid(),
+        id: nanoid(10),
         responseKey: data.current.responseKey,
+        isEnabled: true,
       };
 
       const previousURL = Object.getOwnPropertyDescriptor(
@@ -71,10 +107,15 @@ const Request = () => {
       const newCookies = Object.assign(cookies.request || {}, {
         [data.current.url]: [...previousList, newRequest],
       });
-
-      setCookies('request', JSON.stringify(newCookies));
+      handleSetCookie(newCookies);
       handleResetForm();
     }
+  };
+
+  const handleSetCookie = (cookie: Object) => {
+    setCookies('request', JSON.stringify(cookie), {
+      expires: new Date(new Date().setFullYear(new Date().getFullYear() + 10)),
+    });
   };
 
   const handleRemove = (key: string, request: IStoreRequest) => {
@@ -93,46 +134,105 @@ const Request = () => {
         ...data.current,
         url: '',
         value: defaultRequestValue,
+        responseKey: '',
       },
     }));
   };
 
-  console.log(cookies.request);
+  const handleImport = (e: any) => {
+    const file = e.target.files[0];
+    setFile(file);
+  };
+
+  const handleExport = async () => {
+    let configs = {};
+    try {
+      const response = await axios.get('/dev-tools/config');
+      configs = JSON.parse(response.data);
+    } catch (error) {
+      //
+    }
+
+    const data = {
+      ...cookies,
+      [RESPONSE_CONFIG]: configs,
+    };
+    const type = 'application/json';
+    const blob: Blob = bolbBuilder(data, type);
+    const link = getDownloadableTag('devtools-config.json', blob);
+    link.click();
+  };
+
+  const handleClearFile = () => {
+    setFile(null);
+  };
+
+  const handleSaveConfig = () => {
+    try {
+      const textContent = codeRef.current?.textContent || '';
+      const configs = JSON.parse(textContent);
+      const cookieConfig = Object.getOwnPropertyDescriptor(configs, 'request');
+      const responseConfig = Object.getOwnPropertyDescriptor(
+        configs,
+        RESPONSE_CONFIG
+      );
+      if (cookieConfig?.value) saveCookieConfig(cookieConfig.value);
+      if (responseConfig?.value) saveResponseConfig(responseConfig.value);
+      setFile(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveCookieConfig = (cookieConfig: Object) => {
+    handleSetCookie(cookieConfig);
+  };
+
+  const saveResponseConfig = (responseConfig: any) => {
+    console.log(responseConfig);
+
+    axios
+      .post('/dev-toos/config', {
+        ...responseConfig,
+      })
+      .then(() => {
+        console.log('success');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  console.log(cookies);
 
   return (
     <div className={style.container}>
-      <Requests>
-        <div className='request-form'>
-          <Requests.Methods
-            value={data.current.value}
-            url={data.current.url}
-            placeholder='/api/v1/login'
-            handlePathChange={handleChange}
-            handleChange={onMethodChange}
-          />
-          <Input
-            type='text'
-            name='responseKey'
-            id='responseKey'
-            placeholder='response key;eg:login.error'
-            value={data.current.responseKey}
-            onChange={handleChange}
-          />
-          <button className='py-5 px-8' onClick={handleAdd}>
-            Add
-          </button>
-        </div>
-      </Requests>
+      <AddRequest
+        data={data}
+        handleAdd={handleAdd}
+        onMethodChange={onMethodChange}
+        handleChange={handleChange}
+      />
       <div className={style.requests}>
-        {Object.entries<IStoreRequest[]>(cookies.request || {}).map(
-          ([url, requests]) =>
-            requests.map((request) => (
-              <Requests.View
-                key={request.id}
-                request={request}
-                handleRemove={() => handleRemove(url, request)}
-              />
-            ))
+        <ViewRequest
+          cookies={cookies as ICookie}
+          handleRemove={handleRemove}
+          handleToggle={handleToggle}
+        />
+      </div>
+      <div>
+        {file !== null ? (
+          <ViewConfig
+            ref={codeRef}
+            file={file}
+            handleSaveConfig={handleSaveConfig}
+            handleClearFile={handleClearFile}
+          />
+        ) : (
+          <ImportExportRequest
+            handleImport={handleImport}
+            handleExport={handleExport}
+          />
         )}
       </div>
     </div>

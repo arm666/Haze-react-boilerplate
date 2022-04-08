@@ -3,6 +3,7 @@ import Select, { ActionMeta, SingleValue } from 'react-select';
 import { IStoreRequest } from '../../pages/Request';
 import { IRequest } from '../../types/requests';
 import { methods } from '../../utils/requests';
+import EnableDisableRequest from '../EnableDisableRequest';
 import Input from '../Input';
 import styles from './requests.module.scss';
 
@@ -41,6 +42,7 @@ const Methods = ({
         placeholder={placeholder}
         value={url}
         name='url'
+        autoComplete='off'
         onChange={handlePathChange}
       />
     </div>
@@ -50,16 +52,21 @@ const Methods = ({
 const View = ({
   request,
   handleRemove,
+  handleToggle,
 }: {
   request: IStoreRequest;
   handleRemove: () => void;
+  handleToggle: () => void;
 }) => (
   <div className={styles.view} title={JSON.stringify(request, null, 2)}>
     <div className='method'>
       <span data-method={request.method}>{request.method}</span>:
       <span className='path'>{request.path}</span>
     </div>
-
+    <EnableDisableRequest
+      isEnabled={request.isEnabled}
+      handleToggle={handleToggle}
+    />
     <button
       className='remove-button'
       onClick={handleRemove}

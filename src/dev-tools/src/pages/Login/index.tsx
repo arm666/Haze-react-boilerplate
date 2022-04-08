@@ -3,21 +3,11 @@ import { SingleValue } from 'react-select';
 import Input from '../../components/Input';
 import Requests from '../../components/Requests';
 import axios from '../../lib/axios';
+import { useDev } from '../../providers/DevToolProvider';
 import { IFixtureData } from '../../types/dev-tools';
-import { IRequest } from '../../types/requests';
-import { methods, removeBaseURL } from '../../utils/requests';
+import { IRequest, Requests as R } from '../../types/requests';
+import { findRequestValue, methods, removeBaseURL } from '../../utils/requests';
 import style from './login.module.scss';
-
-interface IForm {
-  data: {
-    username: string;
-    password: string;
-  };
-  requests: {
-    url: string;
-    value: SingleValue<IRequest>;
-  };
-}
 
 interface ITabsData {
   tabData: IFixtureData['login'];
@@ -25,45 +15,47 @@ interface ITabsData {
 
 const Login = ({ tabData }: ITabsData) => {
   const value = methods.find((x) => x.value === tabData.method) as IRequest;
-
-  const [form, setForm] = React.useState<IForm>({
-    data: {
-      username: tabData.data.username,
-      password: tabData.data.password,
-    },
-    requests: {
-      value,
-      url: tabData.path,
-    },
-  });
+  const { setDev } = useDev();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((form) => ({
-      ...form,
+    setDev((dev) => ({
+      ...dev,
       data: {
-        ...form.data,
-        [name]: value,
+        ...dev.data,
+        login: {
+          ...dev.data.login,
+          data: {
+            ...dev.data.login.data,
+            [name]: value,
+          },
+        },
       },
     }));
   };
 
   const onMethodChange = (method: SingleValue<IRequest>) => {
-    setForm((form) => ({
-      ...form,
-      requests: {
-        ...form.requests,
-        value: method,
+    setDev((dev) => ({
+      ...dev,
+      data: {
+        ...dev.data,
+        login: {
+          ...dev.data.login,
+          method: method?.value?.toUpperCase() || 'GET',
+        },
       },
     }));
   };
 
   const handlePathChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm((form) => ({
-      ...form,
-      requests: {
-        ...form.requests,
-        url: e.target.value,
+    setDev((dev) => ({
+      ...dev,
+      data: {
+        ...dev.data,
+        login: {
+          ...dev.data.login,
+          path: e.target.value,
+        },
       },
     }));
   };
@@ -72,7 +64,7 @@ const Login = ({ tabData }: ITabsData) => {
     e.preventDefault();
     axios({
       method: value.value,
-      url: removeBaseURL(form.requests.url),
+      url: removeBaseURL(tabData.path),
     })
       .then((res) => {
         console.log(res.data);
@@ -86,7 +78,7 @@ const Login = ({ tabData }: ITabsData) => {
     <div className={style.container}>
       <Requests>
         <Requests.Methods
-          value={form.requests.value}
+          value={findRequestValue(tabData.method as R)}
           url={tabData.path}
           handleChange={onMethodChange}
           handlePathChange={handlePathChange}
@@ -101,7 +93,7 @@ const Login = ({ tabData }: ITabsData) => {
             id='username'
             onChange={handleChange}
             name='username'
-            value={form.data.username}
+            value={tabData.data.username}
             autoComplete='off'
           />
           <Input
@@ -110,7 +102,7 @@ const Login = ({ tabData }: ITabsData) => {
             id='password'
             onChange={handleChange}
             name='password'
-            value={form.data.password}
+            value={tabData.data.password}
             autoComplete='off'
           />
           <button type='submit' className='p-5'>

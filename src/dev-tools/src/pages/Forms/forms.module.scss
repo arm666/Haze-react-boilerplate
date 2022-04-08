@@ -1,3 +1,5 @@
+@import '../../styles/_default.scss';
+
 .container {
   display: grid;
 
@@ -8,6 +10,6 @@
     white-space: pre-wrap;
     letter-spacing: 1px;
     border-radius: 5px;
-    background-color: #111;
+    background-color: $background-color;
   }
 }

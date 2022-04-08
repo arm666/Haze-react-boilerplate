@@ -15,7 +15,8 @@
         "#password": "12345",
         "[name='gender']": ["#female"],
         "select#position": ["designer"],
-        "[name='skills']": ["#css"]
+        "[name='skills']": ["#css"],
+        "#description": "this is textarea"
       }
     }
   }

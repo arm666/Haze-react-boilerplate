@@ -18,4 +18,7 @@ export const defaultRequestValue = methods.find(
   (x) => x.value === 'GET'
 ) as SingleValue<IRequest>;
 
+export const findRequestValue = (method: Requests) =>
+  methods.find((x) => x.value === method) as SingleValue<IRequest>;
+
 export const removeBaseURL = (url: string) => url.replace(baseURL, '');

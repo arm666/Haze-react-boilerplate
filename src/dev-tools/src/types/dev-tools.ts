@@ -1,5 +1,5 @@
 import { Requests } from './requests';
-import { ITab } from './tabs';
+import { ITabComponent } from './tabs';
 
 export interface IApi {
   method: Requests;
@@ -20,11 +20,11 @@ export interface IFixtureData {
 
 export interface IDevData {
   tabs: {
-    active: ITab;
-    data: ITab[];
+    active: ITabComponent;
+    data: ITabComponent[];
   };
   formData: any;
-  onTabClick: (activeTab: ITab) => void;
+  onTabClick: (activeTab: ITabComponent) => void;
   data: IFixtureData;
   minimize: boolean;
   setDev: React.Dispatch<React.SetStateAction<IDevData>>;

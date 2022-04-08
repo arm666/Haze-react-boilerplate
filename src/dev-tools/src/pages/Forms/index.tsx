@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import hljs from 'highlight.js';
 import userEvent from '@testing-library/user-event';
 import { useDev } from '../../providers/DevToolProvider';
-import { checkInside, getInputType } from '../../utils/helpers';
+import { checkInside, getInputType, getTagName } from '../../utils/helpers';
 import style from './forms.module.scss';
 import 'highlight.js/styles/monokai-sublime.css';
 
@@ -24,15 +24,12 @@ const Forms = () => {
             document.querySelector(selector);
 
           if (matchElement) {
-            const writeableTypes = [
-              'text',
-              'email',
-              'search',
-              'password',
-              'textarea',
-            ];
+            const writeableTypes = ['text', 'email', 'search', 'password'];
 
-            if (checkInside(writeableTypes, getInputType(matchElement))) {
+            if (
+              checkInside(writeableTypes, getInputType(matchElement)) ||
+              checkInside(['textarea'], getTagName(matchElement))
+            ) {
               userEvent.clear(matchElement);
               userEvent.type(matchElement, value.toString());
             } else if (
@@ -47,7 +44,7 @@ const Forms = () => {
                   }
                 }
               });
-            } else if (checkInside(['SELECT'], matchElement.tagName)) {
+            } else if (checkInside(['select'], getTagName(matchElement))) {
               userEvent.selectOptions(matchElement, value);
             }
           }
@@ -58,7 +55,7 @@ const Forms = () => {
 
   React.useEffect(() => {
     hljs.highlightAll();
-  }, [location.pathname, handleFillData]);
+  }, [currentFormData]);
 
   if (!currentFormData) return <div>No form data</div>;
   return (
